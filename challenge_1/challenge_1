@@ -1,0 +1,37 @@
+class Usuario {
+    constructor(nombre, apellido, libros, mascotas) {
+        this.nombre = nombre;
+        this.apellido = apellido;
+        this.libros = libros;
+        this.mascotas = mascotas;
+        this.nombresADevolver = [];
+    }
+
+    getFullName() {
+        return console.log(`El usuario se llama ${this.nombre} y se apellida ${this.apellido}`);
+    }
+    addMascota(nombreMascota) {
+        this.mascotas.push(nombreMascota);
+    }
+    countMascotas() {
+        return console.log(`El usuario tiene ${this.mascotas.length} mascotas`);
+    }
+    addBook(libro) {
+        this.libros.push(libro);
+    }
+    getBookNames() {
+        for (let libro of this.libros) {
+            this.nombresADevolver.push(libro.nombre);}
+        console.log(this.nombresADevolver);
+    }
+}
+
+let usuarioT = new Usuario("Dudu", "Opa",
+ [{nombre: "Fundación", autor: "Isaac Asimov"}, {nombre: "La Vaca Lola", autor: "Lizzy"}], 
+ ["Cabra", "Paloma", "Toro"]);
+
+usuarioT.getFullName();
+usuarioT.addMascota("Vaca");
+usuarioT.countMascotas();
+usuarioT.addBook({nombre: "La Pradera", autor: "Dudu"});
+usuarioT.getBookNames();
