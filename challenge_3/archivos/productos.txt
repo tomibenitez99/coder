@@ -1,0 +1,7 @@
+[{"id":1, "title": "regla", "Price":50,"thumbnail":"https://thumbs.dreamstime.com/b/una-regla-de-madera-121917260.jpg"},
+{"id":2, "title": "goma", "Price":30,"thumbnail":"https://image.shutterstock.com/image-photo/rubber-eraser-pencil-ink-pen-260nw-656520052.jpg"},
+{"id":3, "title": "lápiz", "Price":40,"thumbnail":"https://static9.depositphotos.com/1148595/1176/v/450/depositphotos_11767755-stock-illustration-cartoon-pencil.jpg"},
+{"id":4, "title": "cartuchera", "Price":100,"thumbnail":"https://static9.depositphotos.com/1148595/1176/v/450/depositphotos_11767755-stock-illustration-cartoon-pencil.jpg"},
+{"id":5, "title": "lapicera", "Price":50,"thumbnail":"https://static9.depositphotos.com/1148595/1176/v/450/depositphotos_11767755-stock-illustration-cartoon-pencil.jpg"},
+{"id":6, "title": "crayón", "Price":60,"thumbnail":"https://static9.depositphotos.com/1148595/1176/v/450/depositphotos_11767755-stock-illustration-cartoon-pencil.jpg"},
+{"id":7, "title": "voligoma", "Price":70,"thumbnail":"https://static9.depositphotos.com/1148595/1176/v/450/depositphotos_11767755-stock-illustration-cartoon-pencil.jpg"}]
