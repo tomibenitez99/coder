@@ -1,4 +1,5 @@
 const fs = require('fs');
+const { get } = require('http');
 
 class Contenedor {
     constructor(fileName) {
@@ -92,11 +93,10 @@ class Executor {
                 ); 
             }
         ).then(
-            () => { this.contenedor.getById(1).then((e) => {console.log(e);}) }
+            () => { this.contenedor.getById(1).then((e) => {console.log(e)}) }
         );
     }
 }
-
 
 let regla = {
     "id": null,
@@ -110,9 +110,11 @@ let goma = {
     "thumbnail": "https://image.shutterstock.com/image-photo/rubber-eraser-pencil-ink-pen-260nw-656520052.jpg"
 }
 
-
-const contenedor = new Contenedor("archivo1");
+const contenedor = new  Contenedor("archivo1");
 const executor = new Executor(contenedor);
 
+let res = executor.start(regla);
 
-executor.start(regla).then(() => { executor.start(goma) });
+/* executor.start(regla).then(() => { executor.start(goma) }); */
+
+/* contenedor.getAll().then(productos => console.log(productos)); */
