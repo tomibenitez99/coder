@@ -113,7 +113,3 @@ router.get('/:id', (req, res) => {
 app.get('/', (req, res) => {
   res.render('hello.hbs', { msg: 'frutas' });
 });
-
-app.get("/chat", (req, res) => {
-  res.sendFile("index.html", { root: __dirname });
-});
