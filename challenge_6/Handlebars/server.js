@@ -5,7 +5,9 @@ const app = express();
 const router = Router();
 const { engine } = require('express-handlebars');
 const httpServer = require("http").createServer(app);
-const io = require("socket.io")(httpServer);
+const io = require('socket.io')(httpServer, {
+  cors: { origin: '*', },
+});
 const PORT = 8080;
 
 
@@ -41,28 +43,22 @@ let productsFruits = [
 
 let products = new Products(productsFruits);
 
-let chat = [
-  {
-    email: "admin@admin.com",
-    message: "welcome",
-    date: new Date().toLocaleDateString()
-  }
-];
+let chat = [];
 
 //SOCKETS
 io.on("connection", (socket) => {
   console.log("New connection")
   io.sockets.emit('chat', chat);
-  io.sockets.emit('products', productsFruits);
+  io.sockets.emit('products', products.getAll());
 
   socket.on('newMessage', (msg) => {
     chat.push(msg);
-    io.sockets.emit("arr-chat", msg);
+    io.sockets.emit('chat', chat);
   });
 
   socket.on('addProduct', (data) => {
-    productsFruits.push(data);
-    io.sockets.emit('products', productsFruits.getAll());
+    products.addOne(data);
+    io.sockets.emit('products', products.getAll());
   });
 });
 
@@ -100,7 +96,7 @@ router.post('/', (req, res) => {
 });
 
 router.get('/', (req, res) => {
-  res.render('productslist', { products: products.getAll(), productsExist: true });
+  res.render('productslist.hbs', { products: products.getAll(), productsExist: true });
 });
 
 router.get('/:id', (req, res) => {

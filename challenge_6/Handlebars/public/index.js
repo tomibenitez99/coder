@@ -1,13 +1,11 @@
 const socket = io();
 
-//ATRAPAN MSGS QUE ENVIE EL SERVER
 socket.on('connection', () => {
   console.log("estás conectado");
 });
 
 let prod = [];
 socket.on('products', (data) => {
-  
   prod = data;
 
   let htmlToRender = '';
@@ -19,52 +17,39 @@ socket.on('products', (data) => {
     <td> <img src="${prod[i].thumbnail}"/> </td>
     </tr>
     `
-  }
-
-
-  let htmlMap = data.map(prod =>{
-    return `
-    <tr>
-    <td> <h1>${prod.title}</h1> </td>
-    <td> <h1>${prod.price}</h1> </td>
-    <td> <img src="${prod.thumbnail}"/> </td>
-    </tr>
-    `
-});
-
-  let htmlReduce = data.reduce((previewHtml, CurrentHtml) => previewHtml + `
-  <td> <h1>${CurrentHtml.title}</h1> </td>
-  <td> <h1>${CurrentHtml.price}</h1> </td>
-  <tr>
-  </tr>
-  <td> <img src = "${CurrentHtml.thumbnail}"/> </td>
-  )
-  `,``
-  )
-
-  document.querySelector('#products').innerHTML = htmlReduce;
-
+  };
+  
+  document.querySelector("#products").innerHTML = htmlToRender;
 });
 
 socket.on('chat', (data)=> {
   let htmlReduce = data.reduce((previewHtml, CurrentHtml) => previewHtml + `
   <tr>
-  <td> <h1>${CurrentHtml.email}</h1> </td>
+  <td> <h1>${CurrentHtml.email}&ensp;</h1> </td>
+  <td> <h1>${CurrentHtml.date}&ensp;</h1> </td>
   <td> <h1>${CurrentHtml.message}</h1> </td>
-  <td> <h1>${CurrentHtml.date}</h1> </td>
   </tr>
   `,``
   )
-  document.querySelector('#message').innerHTML = htmlReduce;
+  document.querySelector("#message").innerHTML = htmlReduce;
 })
 
 function addMessage(addMessage) {
   let messageToAdd = {
-    email: addMesssage.email.value,
-    message: addMesssage.email.value,
+    email: addMessage.email.value,
+    message: addMessage.message.value,
     date: new Date().toLocaleDateString(),
   }
   socket.emit('newMessage', messageToAdd)
+}
+
+function addProduct(addProduct) {
+  let productToAdd = {
+    title: addProduct.title.value,
+    price: addProduct.price.value,
+    thumbnail: addProduct.thumbnail.value,
+  }
+  socket.emit('addProduct', productToAdd)
 }
 
 /* socket.on("data-generica", (data) => {
