@@ -1,0 +1,22 @@
+[
+  {
+    "products": [
+      {
+        "name": "Manzana",
+        "description": "fruta",
+        "thumbnail": "https://buenazo.cronosmedia.glr.pe/original/2022/01/31/61f847d92b61d2649f3d4727.jpg",
+        "price": 40,
+        "stock": 6
+      },
+      {
+        "name": "Kiwi",
+        "description": "fruta",
+        "thumbnail": "https://buenazo.cronosmedia.glr.pe/original/2022/01/31/61f847d92b61d2649f3d4727.jpg",
+        "price": 30,
+        "stock": 1
+      }
+    ],
+    "timestamp": "31/08/2022, 10:34:03 pm",
+    "id": 1
+  }
+]
