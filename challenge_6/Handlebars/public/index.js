@@ -5,21 +5,19 @@ socket.on('connection', () => {
 });
 
 let prod = [];
-socket.on('products', (data) => {
-  prod = data;
 
-  let htmlToRender = '';
-  for(let i = 0; i > prod.length; i++) {
-    htmlToRender = htmlToRender + `
+socket.on('products', (data) => {
+
+  let htmlReduce = data.reduce((previewHtml, CurrentHtml) => previewHtml + `
     <tr>
-    <td> <h1>${prod[i].title}</h1> <td>
-    <td> <h1>${prod[i].price}</h1> </td>
-    <td> <img src="${prod[i].thumbnail}"/> </td>
+    <td> <h1>${CurrentHtml.title}&ensp;</h1> <td>
+    <td> <h1>${CurrentHtml.price}&ensp;</h1> </td>
+    <td> <img src="${CurrentHtml.thumbnail}"/> </td>
     </tr>
-    `
-  };
+    `,``
+  )
   
-  document.querySelector("#products").innerHTML = htmlToRender;
+  document.querySelector("#products").innerHTML = htmlReduce;
 });
 
 socket.on('chat', (data)=> {
