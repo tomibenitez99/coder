@@ -1,7 +1,11 @@
 const Products = require("./products.js");
+const { options } = require("./options/optionsMDB.js");
+const knex = require("knex")(options);
+const script = require("./options/script.js")
 const express = require('express');
 const app = express();
 const { engine } = require('express-handlebars');
+const Container = require("./container.js");
 const httpServer = require("http").createServer(app);
 const io = require('socket.io')(httpServer, {
   cors: { origin: '*', },
@@ -31,6 +35,8 @@ app.engine(
   })
 );
 
+script(knex);
+
 let productsFruits = [
   { id: 1, title: 'Banana', price: 40, thumbnail: 'http://localhost:8080/public/banana.png'},
   { id: 2, title: 'Kiwi', price: 100, thumbnail: 'http://localhost:8080/public/kiwi.jpg'},
@@ -39,11 +45,13 @@ let productsFruits = [
 
 let chat = [];
 
+let container = new Container("product", knex);
+
 //SOCKETS
 io.on("connection", (socket) => {
-  console.log("New connection")
+  console.log("New connection");
+  let container = new Container("product", knex);
   io.sockets.emit('chat', chat);
-  io.sockets.emit('products', productsFruits);
 
   socket.on('newMessage', (msg) => {
     chat.push(msg);
@@ -51,11 +59,11 @@ io.on("connection", (socket) => {
   });
 
   socket.on('addProduct', (data) => {
-    productsFruits.push(data);
-    io.sockets.emit('products', productsFruits);
+    console.log(data);
+    container.save(data);
   });
 });
 
 app.get('/', (req, res) => {
-  res.render('productslist', { products: productsFruits, productsExist: true });
+  res.render('productslist', { products: container.getAll(), productsExist: true });
 });
