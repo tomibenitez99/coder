@@ -10,27 +10,15 @@ class Container {
             .insert(data)
             .then((res) => console.log("saved", res))
             .catch((e) => console.log(e))
-            .finally(() => this.db.destroy());
         } catch (error) {
             console.log(error)
         }
     }
 
     async getAll() {
-        this.db
+        return this.db
         .from(this.tableName)
-        .select("*")
-        .then((res) => {
-            res = res.map((item) => ({
-                id: item.id,
-                name: item.name,
-                price: item.price,
-                thumbnail: item.thumbnail
-            }));
-            res.forEach((item) => console.log(item));
-        })
-        .catch((e) => console.log(e))
-        .finally(() => this.db.destroy());
+        .select("*");
     }
 
     async getById(id) {}

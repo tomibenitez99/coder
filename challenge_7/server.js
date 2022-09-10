@@ -1,7 +1,9 @@
+const { sqliteOptions } = require("./options/SQLite3.js")
+const knexSqlite = require('knex')(sqliteOptions);
 const Products = require("./products.js");
 const { options } = require("./options/optionsMDB.js");
 const knex = require("knex")(options);
-const script = require("./options/script.js")
+const script = require("./options/script.js");
 const express = require('express');
 const app = express();
 const { engine } = require('express-handlebars');
@@ -35,35 +37,54 @@ app.engine(
   })
 );
 
-script(knex);
+script(knex, knexSqlite);
 
 let productsFruits = [
-  { id: 1, title: 'Banana', price: 40, thumbnail: 'http://localhost:8080/public/banana.png'},
-  { id: 2, title: 'Kiwi', price: 100, thumbnail: 'http://localhost:8080/public/kiwi.jpg'},
-  { id: 3, title: 'Coco', price: 350, thumbnail: 'http://localhost:8080/public/Coco.jpg'},
+ /* { id: 1, name: 'Banana', price: 40, thumbnail: 'http://localhost:8080/public/banana.png'},
+  { id: 2, name: 'Kiwi', price: 100, thumbnail: 'http://localhost:8080/public/kiwi.jpg'},
+  { id: 3, name: 'Coco', price: 350, thumbnail: 'http://localhost:8080/public/Coco.jpg'},*/
 ];
 
 let chat = [];
 
 let container = new Container("product", knex);
+let chatContainer = new Container("chat", knexSqlite);
+
 
 //SOCKETS
 io.on("connection", (socket) => {
   console.log("New connection");
-  let container = new Container("product", knex);
-  io.sockets.emit('chat', chat);
+  chatContainer.getAll().then(chat => {
+    io.sockets.emit('chat', chat);
+  });
+  container.getAll().then(prods => {
+    io.sockets.emit('products', prods);
+  });
 
-  socket.on('newMessage', (msg) => {
+  socket.on('newMessage', (msg) => {  
+
     chat.push(msg);
+    chatContainer.save(msg);
     io.sockets.emit('chat', chat);
   });
 
   socket.on('addProduct', (data) => {
-    console.log(data);
     container.save(data);
+    productsFruits.push(data);
+    io.sockets.emit('products', productsFruits);
   });
 });
 
 app.get('/', (req, res) => {
-  res.render('productslist', { products: container.getAll(), productsExist: true });
+    container.getAll()
+    .then(p => {
+      prods = p.map((item) => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        thumbnail: item.thumbnail
+      }));
+      res.render('productslist', { products: prods, productsExist: true });
+    }
+  );
 });

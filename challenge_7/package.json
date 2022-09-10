@@ -17,6 +17,7 @@
     "express-handlebars": "^6.0.6",
     "socket.io": "^4.5.1",
     "knex": "^0.21.17",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "sqlite3": "^5.0.2"
   }
 }
