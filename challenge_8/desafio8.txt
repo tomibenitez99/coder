@@ -1,0 +1,85 @@
+// 1. y 2.
+mongod --dbpath C:\Users\tomas\Desktop\Tomi\miBaseMongo
+
+use ecommerce
+
+db.productos.insert([
+	{id: 1, name: 'Banana', price: 400, thumbnail: 'http://localhost:8080/public/banana.png'}, 
+	{id: 2, name: 'Kiwi', price: 100, thumbnail: 'http://localhost:8080/public/kiwi.jpg'},
+	{id: 3, name: 'Coco', price: 3500, thumbnail: 'http://localhost:8080/public/Coco.jpg'},
+	{id: 4, name: 'Frutilla', price: 4000, thumbnail: 'http://localhost:8080/public/frutilla.png'},
+	{id: 5, name: 'Mango', price: 1005, thumbnail: 'http://localhost:8080/public/mango.jpg'},
+	{id: 6, name: 'Maracuyá', price: 3550, thumbnail: 'http://localhost:8080/public/maracuya.jpg'},
+	{id: 7, name: 'Cereza', price: 4060, thumbnail: 'http://localhost:8080/public/cereza.png'},
+	{id: 8, name: 'Ciruela', price: 1000, thumbnail: 'http://localhost:8080/public/ciruela.jpg'},
+	{id: 9, name: 'Manzana', price: 3150, thumbnail: 'http://localhost:8080/public/manzana.jpg'},
+	{id: 10, name: 'Naranja', price: 4350, thumbnail: 'http://localhost:8080/public/naranja.jpg'}
+])
+
+db.mensajes.insert([
+	{email: 'tomi@hotmail.com', date: '08/12/2022', text: 'hola'},
+	{email: 'solsi@hotmail.com', date: '08/12/2022', text: 'hola'},
+	{email: 'tami@hotmail.com', date: '08/12/2022', text: 'hola!'},
+	{email: 'tomy@hotmail.com', date: '08/12/2022', text: 'holis'},
+	{email: 'tamy@hotmail.com', date: '08/12/2022', text: 'hello'},
+	{email: 'somi@hotmail.com', date: '08/12/2022', text: 'buenas'},
+	{email: 'romi@hotmail.com', date: '08/12/2022', text: 'alo'},
+	{email: 'coni@hotmail.com', date: '08/12/2022', text: 'jelou'},
+	{email: 'lomi@hotmail.com', date: '08/12/2022', text: 'hi'},
+	{email: 'foni@hotmail.com', date: '08/12/2022', text: 'hola!!!'}
+])
+
+// 3.
+db.productos.find().pretty()
+db.mensajes.find().pretty()
+
+// 4.
+db.productos.count()
+db.mensajes.count()
+
+// CRUD
+// 5.a.
+db.productos.insertOne({id: 11, name: 'Limón', price: 450, thumbnail: 'http://localhost:8080/public/limon.png'})
+
+// b.I.
+db.productos.find({ price: {$lt: 1000} }).pretty()
+
+// II.
+db.productos.find({ price: {$gte: 1000, $lte: 3000} }).pretty()
+
+// III.
+db.productos.find({ price: {$gt: 3000} }).pretty()
+
+// IV.
+var result = db.productos.find().sort({price: 1}).toArray()
+result[2]
+
+// c.
+db.productos.update(
+  {},
+  { $set: {"stock": 100} },
+  false,
+  true
+)
+
+// d.
+db.productos.updateMany(
+	{ price: { $gt: 4000 } },
+	{ $set: { "stock" : 0 } }
+);
+
+// e.
+db.productos.deleteMany(
+	{ price: { $lt: 1000 } }
+);
+
+// 6.
+db.createUser(
+   {
+     user: "pepe",
+     pwd: "asd456",
+     roles: [ { role: "read", db: "reporting" } ],
+     mechanisms: [ "SCRAM-SHA-256" ]
+   }
+)
+
