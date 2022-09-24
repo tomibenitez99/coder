@@ -1,4 +1,3 @@
-const Product = require("./model/product.js");
 const express = require("express");
 const routerProduct = require("./routers/router-product.js");
 const routerCart = require("./routers/router-cart.js");
