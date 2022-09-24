@@ -4,7 +4,7 @@ const productSchema = require('../schema/productSchema');
 class ProductDao {
     async connectMDB() {
         try {
-            const URL = "mongodb+srv://tomibenitez99:Dooudh-dhooudh99@cluster0.ekk9mhs.mongodb.net/?retryWrites=true&w=majority"
+            const URL = "mongodb+srv://tomibenitez99:tomimongoose123@cluster0.ekk9mhs.mongodb.net/?retryWrites=true&w=majority"
             let rta = await mongoose.connect(URL, {
                 useNewUrlParser: true,
                 useUnifiedTopology: true
