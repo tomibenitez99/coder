@@ -2,85 +2,88 @@ const express = require("express");
 const moment = require("moment");
 const { Router } = express;
 const routerCart = Router();
-const Container = require("../container.js");
+const CartDao = require('../DAOs/cartDao.js')
 
-const cartContainer = new Container("carts");
-const prodContainer = new Container("productos");
 
-routerCart.post('/', (req, res) => {
-    const { body } = req;
-    body.timestamp = moment().format('DD/MM/YYYY, h:mm:ss a');
-    const idCarritoGenerado = cartContainer.save(body);
-    res.json({ success: 'ok', new: idCarritoGenerado });   
-});
+const Cart = new CartDao()
 
-routerCart.delete('/:id', async (req, res) => {
-    let { id } = req.params;
-    id = parseInt(id);
+routerCart.post('/', async function(req, res){
     try {
-        let cart = await cartContainer.getById(id);
-        if(cart == null) {
-            res.json({message: 'El carrito no existe.'})  
-            return;
-        }
-        const deletedCart = await cartContainer.deleteById(id);
-        console.log("se ha eliminado el siguiente carrito: ", deletedCart);
-        res.json(deletedCart);
+        const cart = await Cart.newCart()
+        res.status(200).send({
+            status: 200,
+            data: {
+                cart,
+            },
+            message: 'cart added'
+        })
     } catch(error) {
-        res.json(error);
+        res.status(500).send({
+            status: 500,
+            message: error.message
+        })
     }
 });
 
-routerCart.get("/:id/productos", async (req, res) => {
-    let { id } = req.params;
-    id = parseInt(id);
+routerCart.delete('/:id', async function(req, res){
+    const num = req.params.id
     try {
-        let cart = await cartContainer.getById(id);
-        res.json(cart.products);
+        const deleted = await Cart.deleteCartById(num)
+        res.status(200).send({
+            status: 200,
+            data: {
+                deleted,
+            },
+            message: 'cart deleted'
+        })
     } catch(error) {
-        res.json(error);
+        res.status(500).send({
+            status: 500,
+            message: error.message
+        })
     }
 });
 
-routerCart.post("/:id/productos", async (req, res) => {
-    const { body } = req;
-    let { id } = req.params;
-    id = parseInt(id);
-    try {
-        let cart = await cartContainer.getById(id);
-        for(let i = 0; i < body.products.length; i++) {
-            let product = await prodContainer.getById(body.products[i]);
-            cart.products.push(product);
-        }
-        await cartContainer.updateById(id, cart);
-        res.json(cart);
+routerCart.post('/productos', async function(req, res){
+    try{
+        let idCart = req.body.idCart
+        let idProd = req.body.idProd
+        const productAdded = await Cart.addProduct(idCart, idProd)
+        res.status(200).send({
+            status: 200,
+            data: {
+                productAdded,
+            },
+            message: 'product added to cart'
+        })
     } catch(error) {
-        res.json(error);
+        res.status(500).send({
+            status: 500,
+            message: error.message
+        })
     }
 });
 
-routerCart.delete('/:id/productos/:id_prod', async (req, res) => {
-    let { id } = req.params;
-    let { id_prod } = req.params;
-    id = parseInt(id);
-    let idProd = parseInt(id_prod);
+routerCart.delete('/eliminarProducto/:id', async function(req, res){
+    const idCart = req.params.idCart
     try {
-        let cart = await cartContainer.getById(id);
-        if(cart == null) {
-            res.json({message: 'El carrito no existe.'})  
-            return;
-        }
-        for(let i = 0; i < cart.products.length; i++) {
-            if(cart.products[i].id == idProd) {
-                cart.products.splice(i, 1);
-            }
-        }
-        await cartContainer.updateById(id, cart);
-        res.json(cart);
+        let idCart = req.body.idCart
+        let idProd = req.body.idProd
+        let idInCart = idCart
+        const deletedProduct = await Cart.deleteProductFromCart(idCart, idProd, idInCart)
+        res.status(200).send({
+            status: 200,
+            data: {
+                deletedProduct,
+            },
+            message: 'product deleted from cart'
+        })
     } catch(error) {
-        res.json(error);
+        res.status(500).send({
+            status: 500,
+            message: error.message
+        })
     }
-});
-
+})
 
 module.exports = routerCart;
